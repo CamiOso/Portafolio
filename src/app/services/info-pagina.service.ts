@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { InfoPagina } from '../interfaces/info-pagina.interface';
+import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class InfoPaginaService {
 
 
   constructor(private http: HttpClient) {
-    //console.log('Servicio de infoPagina listo');
+
 
     this.cargarInfo();
     this.cargarEquipo();
@@ -34,14 +36,22 @@ export class InfoPaginaService {
 
    }
 
+   private cargarEquipo() {
 
-   private cargarEquipo(){
-    this.http.get('https://angular-html-89f0a-default-rtdb.firebaseio.com/.json').subscribe((resp:any)=>{
-      this.equipo=resp;
-      console.log(this.equipo);
-
-
+    this.http.get<{ equipo: any[] }>('https://angular-html-89f0a-default-rtdb.firebaseio.com/.json')
+    .pipe(
+      map(resp => resp.equipo || []), // Accede a la propiedad equipo o devuelve un array vacío
+      catchError(error => {
+        console.error('Error al cargar los datos del equipo:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })
+    )
+    .subscribe((equipo: any[]) => {
+      this.equipo = equipo;
+      console.log('Datos procesados:', this.equipo);
     });
 
-   }
+  }
+
+
 }
