@@ -48,7 +48,7 @@ export class InfoPaginaService {
     )
     .subscribe((equipo: any[]) => {
       this.equipo = equipo;
-      console.log('Datos procesados:', this.equipo);
+   
     });
 
   }
