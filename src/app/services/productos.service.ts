@@ -21,7 +21,12 @@ export class ProductosService {
       next: (resp: Producto[]) => {
         console.log(resp);
         this.productos = resp;
-        this.cargando = false;
+
+
+   
+          this.cargando = false;
+
+
       },
       error: (err) => {
         console.error('Error al cargar productos', err);
